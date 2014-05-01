@@ -8,7 +8,7 @@
 
 void Menu();	//prints the menu
 void newprod();	
-void deleteprod();
+void searchprod();
 void viewprod();
 void cls();
 
@@ -17,9 +17,7 @@ struct item{
     char  name[20];
     float price;
 	int	 quantity;
-    char size_one;
-	char size_two;
-    char size_three;
+    char size_avail[3];
 };
 
 int main(void)
@@ -27,7 +25,6 @@ int main(void)
     int z;  
 
     for(z=0;; z++)
-	
 	{
        Menu();
     }
@@ -40,12 +37,12 @@ void Menu()      //Main Menu to select option
     printf("\n**********************************************");
     printf("\n \t  MAIN MENU ");
     printf("\n**********************************************");
-    printf("\n1. Add a new porduct");
+    printf("\n1. Add a new product");
     printf("\n2. Delete an existing product");
     printf("\n3. View the product list");
     printf("\n4. Exit");
     printf("\n**********************************************");
-    printf("\nPlease enter your option < 1 | 2 | 3 | 4 >: ");
+    printf("\n\nPlease enter your option < 1 | 2 | 3 | 4 >: ");
     scanf("%d", &choice);
 
     switch(choice){
@@ -53,7 +50,7 @@ void Menu()      //Main Menu to select option
         newprod();
         break;
     case 2:
-        deleteprod();
+        searchprod();
         break;
     case 3:
         viewprod();
@@ -72,20 +69,19 @@ void newprod()                        //Add new products to inventory
 {   
     int x;
     struct item product;
-	//open file for appending
-	FILE* fPtr = fopen("inventory.txt", "a+");
+	FILE* fPtr;
 
     printf("\n===Add New Product to Inventory===");
     printf("\n\nPlease enter the following information.");
 
 	/*get product info*/
 	//get product id
-    printf("\n\n Item ID Number: ");
+    printf("\n\nItem ID Number: ");
     scanf("%d", &product.id_num);
 	getchar();
 	//get product name
     printf("Name\t: ");
-    scanf("%s", &product.name);
+    scanf("%s", product.name);
 	getchar();
 
     printf("Price\t: ");
@@ -97,18 +93,12 @@ void newprod()                        //Add new products to inventory
 	getchar();
 
     printf("Size\t: ");
-    scanf("%c", &product.size_one);
-	getchar();
-
-	printf("Size\t: ");
-    scanf("%c", &product.size_two);
-	getchar();
-
-	printf("Size\t: ");
-    scanf("%c", &product.size_three);
+    scanf("%s", &product.size_avail);
 	getchar();
 
 	/*save product info*/
+	//open file for appending
+	fPtr = fopen("inventory.txt", "a+");
 	//check file opened successfully
 	if(fPtr == NULL)
 	{
@@ -116,7 +106,7 @@ void newprod()                        //Add new products to inventory
 		return;
 	}
 	//write product info to file
-	fprintf(fPtr, "%d %c %f %d %c %c %c", product.id_num, product.name, product.price, product.quantity, product.size_one, product.size_two, product.size_three);
+	fprintf(fPtr, "%d %s %.2f %d %s\n", product.id_num, product.name, product.price, product.quantity, product.size_avail);
 	//close file
 	fclose(fPtr);
 
@@ -129,8 +119,48 @@ void newprod()                        //Add new products to inventory
 }
 
 
-void deleteprod(){}
-void viewprod(){}
+void searchprod()
+{
+	/*declare necessary variables*/
+	FILE* fPtr;
+	struct item product;
+	char name[20];
+	int match = 0;
+
+	/*get search criteria from user*/
+	printf("What is the name of the item you're looking for: ");
+	scanf("%s", name);
+	getchar();
+
+	/*search file for matching record*/
+	//open file for reading
+	fPtr = fopen("inventory.txt", "r");
+	//check file opened successfully
+	if(fPtr == NULL)
+	{
+		printf("\n\n Your Inventory File cannot found.");
+		return;
+	}
+	//get a record from file
+	do{
+		//get a record from file
+		fscanf(fPtr, "%d %s %.2f %d %s\n", product.id_num, product.name, product.price, product.quantity, product.size_avail);
+		//compare record to search criteria
+		match = strcmp(name, product.name);
+	}while( (match != 0) && (!feof(fPtr)) );
+
+	/*display results of search*/
+	if(match == 0)
+	{
+		printf("%d %s %.2f %d %s\n", product.id_num, product.name, product.price, product.quantity, product.size_avail);
+	}else
+	{
+		printf("\n\nNo match found for %s. Sowee!", name);
+	}
+
+}
+void viewprod()
+{}
 
 
 void cls()
