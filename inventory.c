@@ -118,7 +118,7 @@ void newprod()                        //Add new products to inventory
 
 }
 
-
+/*Searches inventory for an existing product*/
 void searchprod()
 {
 	/*declare necessary variables*/
@@ -148,6 +148,8 @@ void searchprod()
 		//compare record to search criteria
 		match = strcmp(name, product.name);
 	}while( (match != 0) && (!feof(fPtr)) );
+	//close file
+	fclose(fPtr);
 
 	/*display results of search*/
 	if(match == 0)
@@ -159,8 +161,34 @@ void searchprod()
 	}
 
 }
+
+/*Displays all the inventory items on screen*/
 void viewprod()
-{}
+{
+	/*declare necessary variables*/
+	FILE* fPtr;
+	struct item product;
+	
+	/*print all records to the screen*/
+	//open file for reading
+	fPtr = fopen("inventory.txt", "r");
+	//check file opened successfully
+	if(fPtr == NULL)
+	{
+		printf("\n\n Your Inventory File cannot found.");
+		return;
+	}
+	//get a record from file
+	while(!feof(fPtr))
+	{
+		//get a record from file
+		fscanf(fPtr, "%d %s %.2f %d %s\n", product.id_num, product.name, product.price, product.quantity, product.size_avail);
+		//print record to screen
+		printf("%d %s %.2f %d %s\n", product.id_num, product.name, product.price, product.quantity, product.size_avail);
+	}
+	//close file
+	fclose(fPtr);
+}
 
 
 void cls()
