@@ -12,15 +12,14 @@ void searchprod();
 void viewprod();
 void cls();
 
-struct item{
-    int   id_num;
-    char  name[20];
-    float price;
+struct customer
+{	char  name[20];
+    	float price;
 	int	 quantity;
-    char size_avail[3];
+    	char size_avail[3];
 };
 
-int main(void)
+int main()
 {	//The program will continue running until option 4 selected                                   
 	int z;  
 	
@@ -132,7 +131,7 @@ void newprod()                        //Add new products to inventory
 
 	/*save product info*/
 	//open file for appending
-	fPtr = fopen("inventory.txt", "a+");
+	fPtr = fopen("inventory.txt", 'a');
 	//check file opened successfully
 	if(fPtr == NULL)
 	{
@@ -162,10 +161,9 @@ void searchprod()
 	int match = 0;
 
 	/*get search criteria from user*/
-	printf("What is the name of the item you're looking for: ");
+	printf("What is the name of the client: ");
 	scanf("%s", name);
 	getchar();
-
 	/*search file for matching record*/
 	//open file for reading
 	fPtr = fopen("inventory.txt", "r");
@@ -194,7 +192,12 @@ void searchprod()
 
 }
 void viewprod()
-{}
+{	//open file for reading
+	//get the first record from file
+	//until end of file
+		//print record
+		//get next record
+}
 
 
 void cls()
