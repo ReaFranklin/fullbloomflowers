@@ -21,14 +21,43 @@ struct item{
 };
 
 int main(void)
-{						 //The program will continue running until option 4 selected                                   
-    int z;  
+{	//The program will continue running until option 4 selected                                   
+	int z;  
+	
+	//until the person logs in successfully
+    	while(z != 1)
+	{	z = login();	}
+    	
+    	Menu;
+    	return 0;
+}
 
-    for(z=0;; z++)
-	{
-       Menu();
-    }
-    return 0;
+int login()
+{	//declare necessary variables
+	char userName[] = "BridalBliss", uName[10];
+	char passCode[] = "", pCode[10];
+	//print login message
+	printf("\t\tLOGIN\n\n");
+	//get user name
+	printf("Enter username: ");
+	scanf("%s", uName);
+	getchar();
+	//get password
+	printf("\nEnter password: ");
+	scanf("%s", pCode);
+	getchar();
+	//if user name and password match
+	if((strcmp(uName, userName)==0)&&(strcmp(pCode, passCode)==0))
+	{	//print success message 
+		printf("\n\n\nSuccessfully logged in!")
+		//grant access
+		return 1;
+	}else
+	{	//display sorry message 
+		printf("\n\n\nNo match; try again!")
+		//deny access
+		return 0;
+	}
 }
 
 void Menu()      //Main Menu to select option
@@ -37,30 +66,35 @@ void Menu()      //Main Menu to select option
     printf("\n**********************************************");
     printf("\n \t  MAIN MENU ");
     printf("\n**********************************************");
-    printf("\n1. Add a new product");
-    printf("\n2. Delete an existing product");
-    printf("\n3. View the product list");
-    printf("\n4. Exit");
+    printf("\n1. Add a new customer");
+    printf("\n2. View a customer's preferences");
+    printf("\n3. Add a new wedding planner");
+    printf("\n4. View the list of planners");
+    printf("\n5. Exit");
     printf("\n**********************************************");
-    printf("\n\nPlease enter your option < 1 | 2 | 3 | 4 >: ");
+    printf("\n\nPlease enter your option < 1 | 2 | 3 | 4 | 5 >: ");
     scanf("%d", &choice);
+    getchar();
 
     switch(choice){
     case 1:
-        newprod();
+        addCustomer();
         break;
     case 2:
-        searchprod();
+        viewCustomer();
         break;
     case 3:
-        viewprod();
+        addPlanner();
         break;
     case 4:
+        listPlanners();
+        break;
+    case 5:
         printf("\n*** Thanks for using the program! Goodbye. ***");
         exit(0);
         break;
     default:
-        printf("\nError! Wrong Number is Entered\nPlease Try Again");
+        printf("\nOoops! Let's try that again with 1, 2, 3, 4, or 5 to exit.");
         break;
     }
 }
